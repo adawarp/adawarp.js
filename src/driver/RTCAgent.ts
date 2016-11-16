@@ -1,6 +1,6 @@
 /* vim: set ft=typescript expandtab sw=2 sts=2 ff=unix fenc=utf-8 : */
 
-import {Subscription, Subject} from "rxjs";
+import {Observable, Subscription, Subject} from "rxjs";
 import * as Debug from "debug";
 
 import {RTCActionCreator} from "../intent/RTCActionCreator";
@@ -50,9 +50,14 @@ export class RTCAgent {
       this._peer.addStream(this.stream);
     }
     this._peer.onicecandidate = this.sendIceCandidateFromEvent.bind(this);
-    this._peer.onnegotiationneeded = this.debugConnectionStateFromEvent.bind(this);
-    this._peer.onsignalingstatechange = this.debugConnectionStateFromEvent.bind(this);
-    this._peer.oniceconnectionstatechange = this.debugConnectionStateFromEvent.bind(this);
+    // this._peer.onnegotiationneeded = this.debugConnectionStateFromEvent.bind(this);
+    Observable.fromEvent<Event>(this._peer, "signalingstatechange").subscribe((event) => {
+      debug("signaling==================", event);
+    });
+    Observable.fromEvent<any>(this._peer, "iceconnectionstatechange")
+      .filter((event) => { return event.target.iceConnectionState === "failed" })
+      .pluck("target")
+      .subscribe(this._dispatcher.connectionError);
     this._peer.onstatechange = this.debugConnectionStateFromEvent.bind(this);
     this._peer.onidentityresult = (e) => { debug("Identity Result ", e); };
     this._peer.onconnecting = (e) => { debug("Connecting ", e); };

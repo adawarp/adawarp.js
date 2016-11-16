@@ -10,6 +10,14 @@ const io = require('socket.io')(server);
 const peers = {};
 let userCount = 0;
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
+  next();
+});
+
 io.on("connect", (socket) => {
   console.log("Connected", socket.id);
 
@@ -36,17 +44,17 @@ io.on("connect", (socket) => {
 
     socket.on("ring", (request) => {
       console.log("receive ring request", request);
-      ring(request);
+      ring(socket, request);
     });
     
     socket.on("response", (resp) => {
       console.log("receive ring response", resp);
-      response(resp);
+      response(socket, resp);
     });
 
     socket.on("candidate", (candidate) => {
       console.log("receive candidate", candidate);
-      pass(candidate);
+      pass(socket, candidate);
     });
   });
 });
@@ -136,19 +144,44 @@ function getPeer(header) {
   return null;
 }
 
-function ring(request) {
-  let ringee = getPeer(request.header.receiver);
-  console.log(ringee.info);
-  ringee.socket.emit("ring", request );
+function getPeerBySocket(socket) {
+  for (let i in peers) {
+    let peer = peers[i];
+    if (peer.socket == socket) {
+      return peer;
+    }
+  }
 }
 
-function response(resp) {
-  let ringer = getPeer(resp.header.receiver);
-  console.log(ringer.info);
-  ringer.socket.emit("response", resp);
+function ring(socket, message) {
+  let receiver = getPeer(message.header.receiver);
+  let sender = getPeer(message.header.sender);
+  let socketSender = getPeerBySocket(socket);
+  if (receiver && socketSender && sender && socketSender === sender  && socketSender !== receiver ) {
+    receiver.socket.emit("ring", message);
+  } else {
+    socket.emit("signaling_error", "receiver not found");
+  }
 }
 
-function pass(candidate) {
-  let receiver= getPeer(candidate.header.receiver);
-  receiver.socket.emit("candidate", candidate);
+function response(socket, message) {
+  const receiver = getPeer(message.header.receiver);
+  const sender = getPeer(message.header.sender);
+  const socketSender = getPeerBySocket(socket);
+  if (receiver && socketSender && sender && socketSender === sender  && socketSender !== receiver ) {
+    receiver.socket.emit("response", message);
+  } else {
+    socket.emit("signaling_error", "receiver not found");
+  }
+}
+
+function pass(socket, message) {
+  const receiver= getPeer(message.header.receiver);
+  const sender = getPeer(message.header.sender);
+  const socketSender = getPeerBySocket(socket);
+  if (receiver && socketSender && sender && socketSender === sender  && socketSender !== receiver ) {
+    receiver.socket.emit("candidate", message);
+  } else {
+    socket.emit("signaling_error", "receiver not found");
+  }
 }

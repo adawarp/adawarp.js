@@ -20,6 +20,7 @@ export class PeerDispatcher {
 
   signalingServerError: Subject<any>;
   data: Subject<any>;
+  error: Subject<any>;
 
   // PeerJS ComaptiBle API
   open: Subject<any>;
@@ -41,6 +42,8 @@ export class PeerDispatcher {
     this.addStream = new Subject<any>();
     this.signalingServerError = new Subject<any>();
     this.data = new Subject<any>();
+
+    this.error = new Subject<any>();
 
     // PeerJS Comaptible API
     this.open = new Subject<any>();

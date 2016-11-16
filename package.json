@@ -1,6 +1,6 @@
 {
   "name": "adawarp",
-  "version": "0.0.1-alpha3",
+  "version": "0.0.1-alpha4",
   "description": "Core System for Teleporting",
   "repository": {
     "url": "https://bitbucket.org/adavr/warp",
@@ -51,6 +51,7 @@
     "tslint-loader": "^2.1.5",
     "typedoc": "^0.5.0",
     "typescript": "2.1.0-dev.20161028",
+    "uglify-js": "2.7.4",
     "url-loader": "0.5.7",
     "webpack": "1.13.0"
   },
@@ -59,7 +60,8 @@
     "server/dev": "node-dev examples/server/app",
     "build": "webpack --config ./webpack.config.js --color --progress",
     "watch": "webpack --config ./webpack.config.js --watch --color --progress",
-    "release-build": "NODE_ENV=production webpack --config ./webpack.config.js --optimize-occurence-order --optimize-dedupe --optimize-minimize",
+    "release-build": "NODE_ENV=production webpack --config ./webpack.config.js --optimize-occurence-order --optimize-dedupe && npm run uglify",
+    "uglify": "uglifyjs dist/adawarp.js --compress --mangle  --output dist/adawarp.min.js --screw-ie8", 
     "clean": "rm -rf npm-debug* dist/",
     "lint": "tslint -c ./tslint.json ./src/**/*.ts ./src/*.ts ",
     "test/watch": "mocha -w dist/test.js",

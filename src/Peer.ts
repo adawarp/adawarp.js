@@ -158,6 +158,14 @@ export class Peer {
     }
     let agent = new RTCAgent(this._signalingServer, this.config, agentId);
     agent.dispatcher.close.subscribe(this._dispatcher.close);
+    agent.dispatcher.connectionError.subscribe((target: any) => {
+      if (target.iceConnectionStateChange === "failed") {
+        this._dispatcher.error.next({
+          type: "iceConnectionFailed",
+          target 
+        });
+      }
+    });
     agent.dispatcher.dataChannelOpen.subscribe((event: any) => {
       this._dispatcher.connection.next(agent);
     });

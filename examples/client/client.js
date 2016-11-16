@@ -12,7 +12,7 @@ function main() {
       password: "hogepiyo"
     }
   };
-  let hole = new Wormhole(config); 
+  let hole = new Adawarp(config); 
   window["hole"] = hole;
 
   const chatInput = document.getElementById("chat-input");

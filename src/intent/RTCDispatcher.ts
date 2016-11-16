@@ -13,6 +13,8 @@ export class RTCDispatcher {
   removeStream: Subject<any>;
   close: Subject<RTCAgent>;
 
+  connectionError: Subject<any>;
+
   // PeerJS ComaptiBle API
   open: Subject<any>;
   call: Subject<any>;
@@ -26,6 +28,7 @@ export class RTCDispatcher {
     this.track= new Subject<any>();
     this.removeStream = new Subject<any>();
     this.close = new Subject<RTCAgent>();
+    this.connectionError = new Subject<any>();
 
     // PeerJS Comaptible API
     this.open = new Subject<any>();
