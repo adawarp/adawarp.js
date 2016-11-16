@@ -58,6 +58,11 @@ export class RTCAgent {
       .filter((event) => { return event.target.iceConnectionState === "failed" })
       .pluck("target")
       .subscribe(this._dispatcher.connectionError);
+    Observable.fromEvent<any>(this._peer, "iceconnectionstatechange")
+      .filter((event) => { return event.target.iceConnectionState === "disconnect" })
+      .pluck("target")
+      .subscribe(this._dispatcher.close);
+
     this._peer.onstatechange = this.debugConnectionStateFromEvent.bind(this);
     this._peer.onidentityresult = (e) => { debug("Identity Result ", e); };
     this._peer.onconnecting = (e) => { debug("Connecting ", e); };

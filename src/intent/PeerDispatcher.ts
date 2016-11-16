@@ -20,6 +20,7 @@ export class PeerDispatcher {
 
   signalingServerError: Subject<any>;
   data: Subject<any>;
+
   error: Subject<any>;
 
   // PeerJS ComaptiBle API

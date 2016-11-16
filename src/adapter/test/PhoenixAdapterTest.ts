@@ -1,6 +1,6 @@
 /* vim: set ft=typescript expandtab sw=2 sts=2 ff=unix fenc=utf-8 : */
 
-import assert from "power-assert";
+import * as assert from "power-assert";
 import {PhoenixAdapter} from "../PhoenixAdapter";
 import {Config} from "../../Config";
 

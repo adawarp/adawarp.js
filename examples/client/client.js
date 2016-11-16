@@ -1,3 +1,4 @@
+/* vim: set ft=javascript expandtab sw=2 sts=2 ff=unix fenc=utf-8 : */
 'use strict';
 window.onload = main;
 
@@ -62,6 +63,10 @@ function main() {
     const messageElement = document.createElement("li");
     messageElement.textContent = message;
     chatMessages.appendChild(messageElement);
+  });
+
+  hole.on("close", function(event) {
+    console.log("connection closed");
   });
 
   chatSubmit.onclick = function() {
