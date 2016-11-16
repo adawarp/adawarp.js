@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+      "module": "commonjs",
+      "target": "es5",
+      "noImplicitAny": false,
+      "sourceMap": false,
+      "jsx": "react",
+      "target": "ES2015",
+      "traceResolution": true,
+      "lib": [
+        "es2016",
+        "dom"
+      ],
+      "types": [
+        "node",
+        "webrtc",
+        "mocha"
+      ]
+  },
+
+  "include": [
+    "src/**/*",
+    "typings/**/*"
+  ],
+
+  "exclude": [
+    ".git",
+    "node_modules"
+  ]
+}

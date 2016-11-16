@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="./client.js"></script>
+  <script src="./dist/warp.js"></script>
+</head>
+<body>
+  <h1>Welcome to Wormhole</h1>
+  <p> 
+    username: <span id="username"> - </span>
+  </p>
+  <p> 
+    status: <span id="connectionState"> - </span>
+  </p>
+  <p>
+    <ul id="peer-list"></ul>
+  </p>
+
+  <p>
+    <h3> simple chat </h3>
+    <ul id="chat-messages"></ul>
+    <input type="text" id="chat-input">
+    <input type="submit" id="chat-submit">
+  </p>
+</body>
+</html>
